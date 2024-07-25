@@ -1,0 +1,9 @@
+pandas
+transformers
+joblib
+scikit-learn
+nltk
+datasets
+matplotlib
+sentencepiece
+sacremoses
