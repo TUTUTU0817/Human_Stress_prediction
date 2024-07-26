@@ -15,8 +15,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 data_list = [
             # 'ptsd',
             # 'relationships', 
-            'domesticviolence', 
-            # 'survivorsofabuse',
+            # 'domesticviolence', 
+            'survivorsofabuse',
             #  'anxiety'
              ]
 for data in data_list:

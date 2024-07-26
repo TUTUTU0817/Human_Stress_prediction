@@ -1,10 +1,43 @@
 import joblib
 import pandas as pd
-from sklearn.metrics import accuracy_score, f1_score, classification_report
+from sklearn.metrics import accuracy_score, f1_score, classification_report, precision_score, recall_score
 
-# 加载保存的模型
-model_path = './model/logistic_regression_bow_model_2.pkl'
+# 加載保存的模型
+model_path = './model/B_model_LR_bow_model_1.pkl'
 pipeline = joblib.load(model_path)
+
+
+# 資料載入
+df_test = pd.read_csv(f'./datasets/testing_set_ans_2/merge_testing_data_2.csv', index_col=0)
+df_test['input'] = df_test['subreddit'] + df_test['text']
+
+# 文本和標籤
+texts = df_test['input'].values
+labels = df_test['label'].values
+
+# 使用加載的模型進行預測
+predictions = pipeline.predict(texts)
+# print(type(predictions), predictions)
+
+# 評估模型
+accuracy = accuracy_score(labels, predictions)
+f1 = f1_score(labels, predictions, average='weighted')
+precision = precision_score(labels, predictions, average="weighted")
+recall = recall_score(labels, predictions, average="weighted")
+
+print(f"Accuracy: {accuracy}")
+print(f"F1 Score: {f1}")
+print(f"Precision: {precision}")
+print(f"Recall: {recall}")
+print("\nClassification Report:")
+print(classification_report(labels, predictions))
+
+# print預測结果
+df_test['predictions'] = predictions
+print(df_test[['input', 'label', 'predictions']])
+
+
+
 
 # 測試數據集合併
 # df_ans_anxiety = pd.read_csv(
@@ -39,29 +72,3 @@ pipeline = joblib.load(model_path)
 # print(df_test)
 
 # df_test.to_csv('./datasets/testing_set_ans/merge_testing_data.csv')
-
-# 读取和准备测试数据
-df_test = pd.read_csv(
-    f'./datasets/testing_set_ans/merge_testing_data.csv', index_col=0)
-# print(df_test)
-df_test['input'] = df_test['subreddit'] + df_test['text']
-
-# 文本数据和标签
-texts = df_test['input'].values
-labels = df_test['label'].values
-
-# 使用加载的模型进行预测
-predictions = pipeline.predict(texts)
-print(type(predictions), predictions)
-# # 评估模型
-# accuracy = accuracy_score(labels, predictions)
-# f1 = f1_score(labels, predictions, average='weighted')
-
-# print(f"Accuracy: {accuracy}")
-# print(f"F1 Score: {f1}")
-# print("\nClassification Report:")
-# print(classification_report(labels, predictions))
-
-# # 打印预测结果
-# df_test['predictions'] = predictions
-# print(df_test[['input', 'label', 'predictions']])
